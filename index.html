@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="60">
+    <meta http-equiv="refresh" content="15">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -85,96 +85,116 @@
     </div>
 
     <div class="row">
-        <div class="chart-box">
-            <canvas id="temperatureChart"></canvas>
-        </div>
-        <div class="chart-box">
-            <canvas id="humidityChart"></canvas>
-        </div>
+        <div class="chart-box"><canvas id="temperatureChart"></canvas></div>
+        <div class="chart-box"><canvas id="humidityChart"></canvas></div>
     </div>
     <div class="row">
-        <div class="chart-box">
-            <canvas id="pressureChart"></canvas>
-        </div>
-        <div class="chart-box">
-            <canvas id="rainfallChart"></canvas>
-        </div>
+        <div class="chart-box"><canvas id="pressureChart"></canvas></div>
+        <div class="chart-box"><canvas id="rainfallChart"></canvas></div>
     </div>
     <div class="row">
-        <div class="chart-box">
-            <canvas id="windSpeedChart"></canvas>
-        </div>
-        <div class="chart-box">
-            <canvas id="windDirectionChart"></canvas>
-        </div>
+        <div class="chart-box"><canvas id="windSpeedChart"></canvas></div>
+        <div class="chart-box"><canvas id="windDirectionChart"></canvas></div>
     </div>
 
     <script>
         const apiUrl = "https://api.thingspeak.com/channels/2846120/feeds.json?results=15&api_key=JBDCSFE7NSW3UG5E";
 
+        function formatValue(value) {
+            return isNaN(value) ? "--" : parseFloat(value).toFixed(2);
+        }
+
+        let charts = {}; // Store chart instances
+
         async function fetchWeatherData() {
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                const feeds = data.feeds;
-
-                const labels = feeds.map(feed => new Date(feed.created_at).toLocaleTimeString());
-                const windSpeedData = feeds.map(feed => parseFloat(feed.field1));
-                const windDirectionData = feeds.map(feed => parseFloat(feed.field2));
-                const tempData = feeds.map(feed => parseFloat(feed.field3));
-                const humidityData = feeds.map(feed => parseFloat(feed.field4));
-                const pressureData = feeds.map(feed => parseFloat(feed.field5));
-                const rainfallData = feeds.map(feed => parseFloat(feed.field6));
-
-                document.getElementById("temperature").innerText = tempData[tempData.length - 1] + "°C";
-                document.getElementById("humidity").innerText = humidityData[humidityData.length - 1] + "%";
-                document.getElementById("pressure").innerText = pressureData[pressureData.length - 1] + " hPa";
-                document.getElementById("windSpeed").innerText = windSpeedData[windSpeedData.length - 1] + " m/s";
-                document.getElementById("windDirection").innerText = windDirectionData[windDirectionData.length - 1] + "°";
-                document.getElementById("rainfall").innerText = rainfallData[rainfallData.length - 1] + " mm";
-
-                updateChart(temperatureChart, labels, tempData, "Temperature (°C)");
-                updateChart(humidityChart, labels, humidityData, "Humidity (%)");
-                updateChart(pressureChart, labels, pressureData, "Pressure (hPa)");
-                updateChart(rainfallChart, labels, rainfallData, "Rainfall (mm)");
-                updateChart(windSpeedChart, labels, windSpeedData, "Wind Speed (m/s)");
-                updateChart(windDirectionChart, labels, windDirectionData, "Wind Direction (°)");
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        }
-
-        function updateChart(chart, labels, data, label) {
-		new Chart(chart, {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: label,
-                data: data,
-                borderColor: "black",
-                borderWidth: 1,
-                fill: false,
-                tension: 0.4 // Makes the line a smooth curve
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }, // Hide legend
-                title: {
-                    display: true,
-                    text: label
-                }
-            },
-            scales: {
-                x: { title: { display: true, text: "Time" } },
-                y: { title: { display: true, text: label } }
-            }
-        }
-    });
-}
-
+	    try {
+	        const response = await fetch(apiUrl);
+	        const data = await response.json();
+	        const feeds = data.feeds;
+	
+	        if (feeds.length === 0) return;
+	
+	        // Format time labels to "HH:mm" (Hour:Minute) for consistency
+	        const labels = feeds.map(feed => 
+	            new Date(feed.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+	        );
+	
+	        const latestFeed = feeds[feeds.length - 1];
+	
+	        const weatherData = {
+	            temperature: formatValue(latestFeed.field3),
+	            humidity: formatValue(latestFeed.field4),
+	            pressure: formatValue(latestFeed.field5),
+	            windSpeed: formatValue(latestFeed.field1),
+	            windDirection: formatValue(latestFeed.field2),
+	            rainfall: formatValue(latestFeed.field6)
+	        };
+	
+	        document.getElementById("temperature").innerText = weatherData.temperature + "°C";
+	        document.getElementById("humidity").innerText = weatherData.humidity + "%";
+	        document.getElementById("pressure").innerText = weatherData.pressure + " hPa";
+	        document.getElementById("windSpeed").innerText = weatherData.windSpeed + " m/s";
+	        document.getElementById("windDirection").innerText = weatherData.windDirection + "°";
+	        document.getElementById("rainfall").innerText = weatherData.rainfall + " mm";
+	
+	        const chartData = {
+	            temperatureChart: { data: feeds.map(feed => parseFloat(feed.field3)), label: "Temperature (°C)" },
+	            humidityChart: { data: feeds.map(feed => parseFloat(feed.field4)), label: "Humidity (%)" },
+	            pressureChart: { data: feeds.map(feed => parseFloat(feed.field5)), label: "Pressure (hPa)" },
+	            rainfallChart: { data: feeds.map(feed => parseFloat(feed.field6)), label: "Rainfall (mm)" },
+	            windSpeedChart: { data: feeds.map(feed => parseFloat(feed.field1)), label: "Wind Speed (m/s)" },
+	            windDirectionChart: { data: feeds.map(feed => parseFloat(feed.field2)), label: "Wind Direction (°)" }
+	        };
+	
+	        for (let chartId in chartData) {
+	            updateChart(chartId, labels, chartData[chartId].data, chartData[chartId].label);
+	        }
+	    } catch (error) {
+	        console.error("Error fetching data:", error);
+	    }
+	}
+	
+	function updateChart(chartId, labels, data, label) {
+	    const ctx = document.getElementById(chartId).getContext("2d");
+	
+	    if (charts[chartId]) {
+	        charts[chartId].data.labels = labels;
+	        charts[chartId].data.datasets[0].data = data;
+	        charts[chartId].update();
+	    } else {
+	        charts[chartId] = new Chart(ctx, {
+	            type: "line",
+	            data: {
+	                labels: labels,
+	                datasets: [{
+	                    label: label,
+	                    data: data,
+	                    borderColor: "black",
+	                    borderWidth: 1,
+	                    fill: false,
+	                    tension: 0.4
+	                }]
+	            },
+	            options: {
+	                responsive: true,
+	                plugins: {
+	                    legend: { display: false },
+	                    title: { display: true, text: label }
+	                },
+	                scales: {
+	                    x: { 
+	                        title: { display: true, text: "Time" },
+	                        ticks: {
+	                            autoSkip: true, 
+	                            maxTicksLimit: 6
+	                        }
+	                    },
+	                    y: { title: { display: true, text: label } }
+	                }
+	            }
+	        });
+	    }
+	}
 
         fetchWeatherData();
         setInterval(fetchWeatherData, 15000);
