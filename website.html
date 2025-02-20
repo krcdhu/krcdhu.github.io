@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IoT MicroWeather Station</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="15">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .navbar {
+            background-color: #154c79;
+            padding: 15px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+        .parameter, .chart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+        .parameter img {
+            width: 50px;
+            height: 50px;
+        }
+        .chart-box {
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">IoT MicroWeather Station</div>
+
+    <div class="row">
+        <div class="parameter">
+            <h4>Temperature</h4>
+            <img src="temperature.png" alt="Temperature">
+            <p id="temperature">--°C</p>
+        </div>
+        <div class="parameter">
+            <h4>Humidity</h4>
+            <img src="humidity.png" alt="Humidity">
+            <p id="humidity">--%</p>
+        </div>
+        <div class="parameter">
+            <h4>Barometric Pressure</h4>
+            <img src="pressure.png" alt="Pressure">
+            <p id="pressure">-- hPa</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="parameter">
+            <h4>Rainfall</h4>
+            <img src="rain.png" alt="Rainfall">
+            <p id="rainfall">-- mm</p>
+        </div>
+        <div class="parameter">
+            <h4>Wind Speed</h4>
+            <img src="wind.png" alt="Wind Speed">
+            <p id="windSpeed">-- m/s</p>
+        </div>
+        <div class="parameter">
+            <h4>Wind Direction</h4>
+            <img src="compass.png" alt="Wind Direction">
+            <p id="windDirection">--°</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="chart-box">
+            <canvas id="temperatureChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="humidityChart"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="chart-box">
+            <canvas id="pressureChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="rainfallChart"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="chart-box">
+            <canvas id="windSpeedChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="windDirectionChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = "https://api.thingspeak.com/channels/2846120/feeds.json?results=15&api_key=JBDCSFE7NSW3UG5E";
+
+        async function fetchWeatherData() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                const feeds = data.feeds;
+
+                const labels = feeds.map(feed => new Date(feed.created_at).toLocaleTimeString());
+                const windSpeedData = feeds.map(feed => parseFloat(feed.field1));
+                const windDirectionData = feeds.map(feed => parseFloat(feed.field2));
+                const tempData = feeds.map(feed => parseFloat(feed.field3));
+                const humidityData = feeds.map(feed => parseFloat(feed.field4));
+                const pressureData = feeds.map(feed => parseFloat(feed.field5));
+                const rainfallData = feeds.map(feed => parseFloat(feed.field6));
+
+                document.getElementById("temperature").innerText = tempData[tempData.length - 1] + "°C";
+                document.getElementById("humidity").innerText = humidityData[humidityData.length - 1] + "%";
+                document.getElementById("pressure").innerText = pressureData[pressureData.length - 1] + " hPa";
+                document.getElementById("windSpeed").innerText = windSpeedData[windSpeedData.length - 1] + " m/s";
+                document.getElementById("windDirection").innerText = windDirectionData[windDirectionData.length - 1] + "°";
+                document.getElementById("rainfall").innerText = rainfallData[rainfallData.length - 1] + " mm";
+
+                updateChart(temperatureChart, labels, tempData, "Temperature (°C)");
+                updateChart(humidityChart, labels, humidityData, "Humidity (%)");
+                updateChart(pressureChart, labels, pressureData, "Pressure (hPa)");
+                updateChart(rainfallChart, labels, rainfallData, "Rainfall (mm)");
+                updateChart(windSpeedChart, labels, windSpeedData, "Wind Speed (m/s)");
+                updateChart(windDirectionChart, labels, windDirectionData, "Wind Direction (°)");
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        function updateChart(chart, labels, data, label) {
+		new Chart(chart, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: label,
+                data: data,
+                borderColor: "black",
+                borderWidth: 1,
+                fill: false,
+                tension: 0.4 // Makes the line a smooth curve
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }, // Hide legend
+                title: {
+                    display: true,
+                    text: label
+                }
+            },
+            scales: {
+                x: { title: { display: true, text: "Time" } },
+                y: { title: { display: true, text: label } }
+            }
+        }
+    });
+}
+
+
+        fetchWeatherData();
+        setInterval(fetchWeatherData, 15000);
+    </script>
+</body>
+</html>
