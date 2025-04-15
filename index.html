@@ -122,29 +122,31 @@
 	        const latestFeed = feeds[feeds.length - 1];
 	
 	        const weatherData = {
-	            temperature: formatValue(latestFeed.field3),
-	            humidity: formatValue(latestFeed.field4),
-	            pressure: formatValue(latestFeed.field5),
-	            windSpeed: formatValue(latestFeed.field1),
-	            windDirection: formatValue(latestFeed.field2),
-	            rainfall: formatValue(latestFeed.field6)
-	        };
-	
-	        document.getElementById("temperature").innerText = weatherData.temperature + "°C";
-	        document.getElementById("humidity").innerText = weatherData.humidity + "%";
-	        document.getElementById("pressure").innerText = weatherData.pressure + " hPa";
-	        document.getElementById("windSpeed").innerText = weatherData.windSpeed + " m/s";
-	        document.getElementById("windDirection").innerText = weatherData.windDirection + "°";
-	        document.getElementById("rainfall").innerText = weatherData.rainfall + " mm";
-	
-	        const chartData = {
-	            temperatureChart: { data: feeds.map(feed => parseFloat(feed.field3)), label: "Temperature (°C)" },
-	            humidityChart: { data: feeds.map(feed => parseFloat(feed.field4)), label: "Humidity (%)" },
-	            pressureChart: { data: feeds.map(feed => parseFloat(feed.field5)), label: "Pressure (hPa)" },
-	            rainfallChart: { data: feeds.map(feed => parseFloat(feed.field6)), label: "Rainfall (mm)" },
-	            windSpeedChart: { data: feeds.map(feed => parseFloat(feed.field1)), label: "Wind Speed (m/s)" },
-	            windDirectionChart: { data: feeds.map(feed => parseFloat(feed.field2)), label: "Wind Direction (°)" }
-	        };
+		    temperature: formatValue(latestFeed.field4),
+		    humidity: formatValue(latestFeed.field5),
+		    pressure: formatValue(latestFeed.field6),
+		    windSpeed: formatValue(latestFeed.field1),
+		    windDirection: formatValue(latestFeed.field2),
+		    rainfall: formatValue(latestFeed.field7),
+		    maxGust: formatValue(latestFeed.field3) // optional if displaying
+		};
+		
+		document.getElementById("temperature").innerText = weatherData.temperature + "°C";
+		document.getElementById("humidity").innerText = weatherData.humidity + "%";
+		document.getElementById("pressure").innerText = weatherData.pressure + " hPa";
+		document.getElementById("windSpeed").innerText = weatherData.windSpeed + " m/s";
+		document.getElementById("windDirection").innerText = weatherData.windDirection + "°";
+		document.getElementById("rainfall").innerText = weatherData.rainfall + " mm";
+		
+		const chartData = {
+		    temperatureChart: { data: feeds.map(feed => parseFloat(feed.field4)), label: "Temperature (°C)" },
+		    humidityChart: { data: feeds.map(feed => parseFloat(feed.field5)), label: "Humidity (%)" },
+		    pressureChart: { data: feeds.map(feed => parseFloat(feed.field6)), label: "Pressure (hPa)" },
+		    rainfallChart: { data: feeds.map(feed => parseFloat(feed.field7)), label: "Rainfall (mm)" },
+		    windSpeedChart: { data: feeds.map(feed => parseFloat(feed.field1)), label: "Wind Speed (m/s)" },
+		    windDirectionChart: { data: feeds.map(feed => parseFloat(feed.field2)), label: "Wind Direction (°)" }
+		};
+
 	
 	        for (let chartId in chartData) {
 	            updateChart(chartId, labels, chartData[chartId].data, chartData[chartId].label);
