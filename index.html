@@ -6,257 +6,108 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
   :root {
-    --primary: #152860;
-    --primary-light: #bfdbfe;
-    --secondary: #64748b;
-    --accent: #f59e0b;
-    --light: #f8fafc;
-    --dark: #1e293b;
-    --success: #10b981;
-    --danger: #ef4444;
-    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --primary: #152860; --primary-light: #bfdbfe; --secondary: #64748b;
+    --accent: #f59e0b; --light: #f8fafc; --dark: #1e293b;
+    --success: #10b981; --danger: #ef4444; --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --transition: all 0.2s ease;
   }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: #f1f5f9;
-    color: var(--dark);
-    line-height: 1.5;
+    font-family: 'Inter', system-ui, sans-serif; background: #f1f5f9;
+    color: var(--dark); line-height: 1.5;
   }
-
   header {
-    background: var(--primary);
-    color: white;
-    padding: 1.5rem;
-    text-align: center;
-    box-shadow: var(--card-shadow);
+    background: var(--primary); color: white; padding: 1.5rem;
+    text-align: center; box-shadow: var(--card-shadow);
   }
-
-  header h1 {
-    font-weight: 600;
-    font-size: 1.8rem;
-    margin-bottom: 0.3rem;
-  }
-
-  header p {
-    opacity: 0.9;
-    font-weight: 300;
-  }
-
-  .last-updated {
-    font-size: 0.85rem;
-    opacity: 0.8;
-    margin-top: 0.5rem;
-  }
-
+  header h1 { font-weight: 600; font-size: 1.8rem; margin-bottom: 0.3rem; }
+  header p { opacity: 0.9; font-weight: 300; }
+  .last-updated { font-size: 0.85rem; opacity: 0.8; margin-top: 0.5rem; }
   nav {
-    background: white;
-    padding: 0.75rem;
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    background: white; padding: 0.75rem; display: flex; justify-content: center;
+    gap: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: sticky; top: 0; z-index: 10;
   }
-
   nav button {
-    background: var(--light);
-    border: none;
-    color: var(--secondary);
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
+    background: var(--light); border: none; color: var(--secondary);
+    padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 500;
+    cursor: pointer; transition: var(--transition);
   }
-
-  nav button:hover {
-    background: var(--primary-light);
-    color: var(--primary);
-  }
-
+  nav button:hover { background: var(--primary-light); color: var(--primary); }
   .content {
-    max-width: 1100px;
-    margin: 1.5rem auto;
-    padding: 1.5rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: var(--card-shadow);
+    max-width: 1100px; margin: 1.5rem auto; padding: 1.5rem;
+    background: white; border-radius: 12px; box-shadow: var(--card-shadow);
   }
-
   h2 {
-    color: var(--dark);
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #e2e8f0;
+    color: var(--dark); font-size: 1.5rem; font-weight: 600;
+    margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;
   }
-
+  h3 {
+    color: var(--dark); font-size: 1.2rem; font-weight: 600;
+    margin: 1.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0;
+  }
   .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem; margin-bottom: 1.5rem;
   }
-
   .metric-card {
-    background: #f8fafc;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: var(--transition);
+    background: #f8fafc; border-radius: 8px; padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); transition: var(--transition);
   }
-
-  .metric-card:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-  }
-
+  .metric-card:hover { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
   .metric-title {
-    color: var(--secondary);
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: var(--secondary); font-size: 0.875rem; font-weight: 500;
+    margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;
   }
-
-  .metric-value {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 0.5rem;
-  }
-
-  .metric-details {
-    font-size: 0.8rem;
-    color: var(--secondary);
-  }
-
+  .metric-value { font-size: 1.5rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; }
+  .metric-details { font-size: 0.8rem; color: var(--secondary); }
   .compare-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #e2e8f0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0;
   }
-
-  .compare-row:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-  }
-
+  .compare-row:last-child { border-bottom: none; margin-bottom: 0; }
   .compare-label {
-    grid-column: 1 / -1;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 0.5rem;
+    grid-column: 1 / -1; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem;
   }
-
   .compare-station {
-    background: #f8fafc;
-    border-radius: 8px;
-    padding: 1rem;
+    background: #f8fafc; border-radius: 8px; padding: 1rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
-
   .compare-station h4 {
-    color: var(--secondary);
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: var(--secondary); font-size: 0.875rem; font-weight: 500;
+    margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;
   }
-
-  .compare-highlight {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 0.5rem;
-  }
-
+  .compare-highlight { font-size: 1.25rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; }
   .chart-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-    gap: 1.5rem;
-    margin: 1.5rem 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 1.5rem; margin: 1.5rem 0;
   }
-
   .chart-container {
-    background: white;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    height: 300px;
+    background: white; border-radius: 8px; padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); height: 300px;
   }
-
   table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-    font-size: 0.875rem;
+    width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.875rem;
   }
-
   th {
-    background: #f1f5f9;
-    font-weight: 500;
-    text-align: left;
-    color: var(--secondary);
-    padding: 0.75rem 1rem;
+    background: #f1f5f9; font-weight: 500; text-align: left;
+    color: var(--secondary); padding: 0.75rem 1rem;
   }
-
-  td {
-    padding: 0.75rem 1rem;
-    border-top: 1px solid #e2e8f0;
-  }
-
-  tr:hover {
-    background: #f1f5f9;
-  }
-
+  td { padding: 0.75rem 1rem; border-top: 1px solid #e2e8f0; }
+  tr:hover { background: #f1f5f9; }
   .btn {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
+    background: var(--primary); color: white; border: none;
+    padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;
+    cursor: pointer; transition: var(--transition);
   }
-
-  .btn:hover {
-    background: #1e40af;
-    box-shadow: 0 2px 5px rgba(30, 58, 138, 0.3);
-  }
-
-  .loading {
-    text-align: center;
-    padding: 2rem;
-    color: var(--secondary);
-    font-size: 1rem;
-  }
-
+  .btn:hover { background: #1e40af; box-shadow: 0 2px 5px rgba(30, 58, 138, 0.3); }
+  .loading { text-align: center; padding: 2rem; color: var(--secondary); font-size: 1rem; }
+  .summary-table { margin-top: 1.5rem; }
+  .summary-table .summary-day { font-weight: 500; }
   @media (max-width: 768px) {
-    .chart-grid,
-    .compare-row {
-      grid-template-columns: 1fr;
-    }
+    .chart-grid, .compare-row { grid-template-columns: 1fr; }
   }
-</style>
-
+  </style>
 </head>
 <body>
   <header>
@@ -274,6 +125,12 @@
   <div id="compare" class="content">
     <h2>Station Comparison</h2>
     <div id="compareData" class="loading">Loading data...</div>
+    
+    <h3>Station A: 7-Day Summary</h3>
+    <div id="station1Summary" class="loading">Loading summary data...</div>
+    
+    <h3>Station B: 7-Day Summary</h3>
+    <div id="station2Summary" class="loading">Loading summary data...</div>
   </div>
 
   <div id="station1" class="content" style="display:none">
@@ -294,7 +151,10 @@
 
   <script>
     // Constants
-    const stations = [{ id: '2846120', key: 'JBDCSFE7NSW3UG5E', name: 'Station A' }, { id: '2919932', key: 'NJVE3KPMFUOS13OA', name: 'Station B' }];
+    const stations = [
+      { id: '2846120', key: 'JBDCSFE7NSW3UG5E', name: 'Station A' }, 
+      { id: '2919932', key: 'NJVE3KPMFUOS13OA', name: 'Station B' }
+    ];
     const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     const chartConfigs = [
       {field: 'field4', label: 'Temperature (°C)', color: '#ef4444'},
@@ -309,6 +169,7 @@
     
     // Variables
     let fullData = [[], []];
+    let weekData = [[], []];
     let charts = {};
 
     // Utility functions
@@ -319,11 +180,55 @@
       return feeds.slice(-readingsCount).reduce((sum, f) => sum + safeParseFloat(f.field7, 0), 0).toFixed(2);
     };
     const switchView = view => ['compare', 'station1', 'station2'].forEach(v => document.getElementById(v).style.display = v === view ? 'block' : 'none');
+    
+    // Format a date as YYYY-MM-DD
+    const formatDate = date => {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    };
+
+    // Group data by day
+    const groupByDay = feeds => {
+      const days = {};
+      feeds.forEach(feed => {
+        const date = new Date(feed.created_at);
+        const day = formatDate(date);
+        if (!days[day]) days[day] = [];
+        days[day].push(feed);
+      });
+      return days;
+    };
+
+    // Find most frequent wind direction for a day
+    const getMostFrequentDirection = feeds => {
+      const dirCounts = Array(8).fill(0);
+      feeds.forEach(feed => {
+        const dir = parseInt(feed.field2);
+        if (!isNaN(dir) && dir >= 0 && dir < 8) dirCounts[dir]++;
+      });
+      let maxIndex = 0, maxCount = 0;
+      dirCounts.forEach((count, i) => {
+        if (count > maxCount) {
+          maxCount = count;
+          maxIndex = i;
+        }
+      });
+      return maxCount > 0 ? indexToCompass(maxIndex) : "N/A";
+    };
 
     // Data handling
     const fetchData = async (station, count) => {
       const res = await fetch(`https://api.thingspeak.com/channels/${station.id}/feeds.json?api_key=${station.key}&results=${count}`);
       return (await res.json()).feeds;
+    };
+    
+    // Fetch 7 days of data
+    const fetchWeekData = async () => {
+      const promises = stations.map(station => 
+        fetch(`https://api.thingspeak.com/channels/${station.id}/feeds.json?api_key=${station.key}&days=7`)
+          .then(res => res.json())
+          .then(data => data.feeds)
+      );
+      return Promise.all(promises);
     };
     
     // Metrics calculation
@@ -332,7 +237,8 @@
       if (!validValues.length) return { avg: "0.00", max: "0.00", min: "0.00" };
       return {
         avg: (validValues.reduce((sum, val) => sum + val, 0) / validValues.length).toFixed(2),
-        max: Math.max(...validValues).toFixed(2), min: Math.min(...validValues).toFixed(2)
+        max: Math.max(...validValues).toFixed(2), 
+        min: Math.min(...validValues).toFixed(2)
       };
     };
     
@@ -376,6 +282,88 @@
       
       return html + '</div>';
     };
+    
+    // Generate 7-day summary table
+const generateWeeklySummary = stationData => {
+  const days = groupByDay(stationData);
+  const dayKeys = Object.keys(days).sort((a, b) => new Date(b) - new Date(a));
+  
+  let html = `
+    <div style="overflow-x: auto;">
+      <table class="summary-table" style="font-size: 0.75rem;">
+        <tr>
+          <th style="padding: 0.4rem 0.5rem;">Date</th>
+          <th colspan="3" style="padding: 0.4rem 0.3rem;">Temp</th>
+          <th colspan="3" style="padding: 0.4rem 0.3rem;">Hum</th>
+          <th colspan="3" style="padding: 0.4rem 0.3rem;">Pressure</th>
+          <th colspan="3" style="padding: 0.4rem 0.3rem;">Heat Index</th>
+          <th style="padding: 0.4rem 0.3rem;">Avg Wind</th>
+          <th style="padding: 0.4rem 0.3rem;">Max Gust</th>
+          <th style="padding: 0.4rem 0.3rem;">Wind Dir</th>
+          <th style="padding: 0.4rem 0.3rem;">Rain</th>
+        </tr>
+        <tr>
+          <th style="padding: 0.4rem 0.5rem;"></th>
+          <th style="padding: 0.4rem 0.3rem;">Min</th>
+          <th style="padding: 0.4rem 0.3rem;">Avg</th>
+          <th style="padding: 0.4rem 0.3rem;">Max</th>
+          <th style="padding: 0.4rem 0.3rem;">Min</th>
+          <th style="padding: 0.4rem 0.3rem;">Avg</th>
+          <th style="padding: 0.4rem 0.3rem;">Max</th>
+          <th style="padding: 0.4rem 0.3rem;">Min</th>
+          <th style="padding: 0.4rem 0.3rem;">Avg</th>
+          <th style="padding: 0.4rem 0.3rem;">Max</th>
+          <th style="padding: 0.4rem 0.3rem;">Min</th>
+          <th style="padding: 0.4rem 0.3rem;">Avg</th>
+          <th style="padding: 0.4rem 0.3rem;">Max</th>
+          <th style="padding: 0.4rem 0.3rem;">m/s</th>
+          <th style="padding: 0.4rem 0.3rem;">m/s</th>
+          <th style="padding: 0.4rem 0.3rem;"></th>
+          <th style="padding: 0.4rem 0.3rem;">mm</th>
+        </tr>
+  `;
+  
+  dayKeys.slice(0, 7).forEach(day => {
+    const dayFeeds = days[day];
+    const tempStats = calcStats(dayFeeds, 'field4');
+    const humStats = calcStats(dayFeeds, 'field5');
+    const pressStats = calcStats(dayFeeds, 'field6');
+    const heatStats = calcStats(dayFeeds, 'field8');
+    const windStats = calcStats(dayFeeds, 'field1');
+    const gustStats = calcStats(dayFeeds, 'field3');
+    const mostFreqDir = getMostFrequentDirection(dayFeeds);
+    const rainfall = dayFeeds.reduce((sum, f) => sum + safeParseFloat(f.field7, 0), 0).toFixed(2);
+    
+    const dateObj = new Date(day);
+    const dayNum = dateObj.getDate();
+    const dayName = dateObj.toLocaleDateString(undefined, { weekday: 'short' }).substring(0, 3);
+    
+    html += `
+      <tr>
+        <td style="padding: 0.4rem 0.5rem;">${dayNum}<br>${dayName}</td>
+        <td style="padding: 0.4rem 0.3rem;">${tempStats.min}</td>
+        <td style="padding: 0.4rem 0.3rem;">${tempStats.avg}</td>
+        <td style="padding: 0.4rem 0.3rem;">${tempStats.max}</td>
+        <td style="padding: 0.4rem 0.3rem;">${humStats.min}</td>
+        <td style="padding: 0.4rem 0.3rem;">${humStats.avg}</td>
+        <td style="padding: 0.4rem 0.3rem;">${humStats.max}</td>
+        <td style="padding: 0.4rem 0.3rem;">${pressStats.min}</td>
+        <td style="padding: 0.4rem 0.3rem;">${pressStats.avg}</td>
+        <td style="padding: 0.4rem 0.3rem;">${pressStats.max}</td>
+        <td style="padding: 0.4rem 0.3rem;">${heatStats.min}</td>
+        <td style="padding: 0.4rem 0.3rem;">${heatStats.avg}</td>
+        <td style="padding: 0.4rem 0.3rem;">${heatStats.max}</td>
+        <td style="padding: 0.4rem 0.3rem;">${windStats.avg}</td>
+        <td style="padding: 0.4rem 0.3rem;">${gustStats.max}</td>
+        <td style="padding: 0.4rem 0.3rem;">${mostFreqDir}</td>
+        <td style="padding: 0.4rem 0.3rem;">${rainfall}</td>
+      </tr>
+    `;
+  });
+  
+  html += '</table></div>';
+  return html;
+};
     
     const createTable = feeds => {
       let html = '<table><tr><th>Time</th><th>Wind (m/s)</th><th>Dir</th><th>Gust</th><th>Temp (°C)</th><th>Hum (%)</th><th>Press (hPa)</th><th>Rain (mm)</th><th>Heat (°C)</th></tr>';
@@ -504,7 +492,8 @@
         data: {
           labels: directionData.map((_, i) => i + 1),
           datasets: [{
-            label: 'Wind Direction', data: directionData, borderColor: color, backgroundColor: `${color}20`, borderWidth: 2, pointRadius: 3, tension: 0.3, fill: false
+            label: 'Wind Direction', data: directionData, borderColor: color, backgroundColor: `${color}20`, 
+            borderWidth: 2, pointRadius: 3, tension: 0.3, fill: false
           }]
         },
         options: {
@@ -538,16 +527,40 @@
         setupCharts('station1'); setupCharts('station2');
         const [feeds1, feeds2] = await Promise.all([fetchData(stations[0], 144), fetchData(stations[1], 144)]);
         fullData = [feeds1, feeds2];
+        
         document.getElementById('station1Data').innerHTML = processWeatherData(feeds1);
         document.getElementById('station2Data').innerHTML = processWeatherData(feeds2);
         document.getElementById('station1Table').innerHTML = createTable(feeds1);
         document.getElementById('station2Table').innerHTML = createTable(feeds2);
         document.getElementById('compareData').innerHTML = createComparisonView(feeds1, feeds2);
         document.getElementById('lastUpdated').innerText = 'Last updated: ' + new Date().toLocaleString();
-        renderStationCharts('station1', feeds1); renderStationCharts('station2', feeds2);
+        
+        renderStationCharts('station1', feeds1); 
+        renderStationCharts('station2', feeds2);
+        
+        // Now load 7-day data for summaries
+        loadWeeklyData();
       } catch (error) {
         console.error('Error loading data:', error);
-        document.querySelectorAll('.loading').forEach(el => { el.innerHTML = 'Failed to load data. Please try again later.'; });
+        document.querySelectorAll('.loading').forEach(el => { 
+          el.innerHTML = 'Failed to load data. Please try again later.'; 
+        });
+      }
+    }
+    
+    // Load 7-day data for weekly summaries
+    async function loadWeeklyData() {
+      try {
+        const [weekData1, weekData2] = await fetchWeekData();
+        weekData = [weekData1, weekData2];
+        
+        // Generate and display weekly summaries
+        document.getElementById('station1Summary').innerHTML = generateWeeklySummary(weekData1);
+        document.getElementById('station2Summary').innerHTML = generateWeeklySummary(weekData2);
+      } catch (error) {
+        console.error('Error loading weekly data:', error);
+        document.getElementById('station1Summary').innerHTML = 'Failed to load weekly summary.';
+        document.getElementById('station2Summary').innerHTML = 'Failed to load weekly summary.';
       }
     }
 
