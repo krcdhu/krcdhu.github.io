@@ -244,45 +244,44 @@
     
     // UI generation
     const processWeatherData = feeds => {
-  const latest = feeds[feeds.length - 1];
-  let html = '<div class="metrics-grid">';
-  
-  // Temperature
-  const tempStats = calcStats(feeds, 'field4');
-  html += `<div class="metric-card"><div class="metric-title">Temperature</div><div class="metric-value">${latest.field4 || "0.00"} °C</div>
-    <div class="metric-details">High: ${tempStats.max} °C | Low: ${tempStats.min} °C | Avg: ${tempStats.avg} °C</div></div>`;
-  
-  // Humidity
-  const humStats = calcStats(feeds, 'field5');
-  html += `<div class="metric-card"><div class="metric-title">Humidity</div><div class="metric-value">${latest.field5 || "0.00"}%</div>
-    <div class="metric-details">High: ${humStats.max}% | Low: ${humStats.min}% | Avg: ${humStats.avg}%</div></div>`;
-  
-  // Pressure
-  const pressStats = calcStats(feeds, 'field6');
-  html += `<div class="metric-card"><div class="metric-title">Pressure</div><div class="metric-value">${latest.field6 || "0.00"} hPa</div>
-    <div class="metric-details">High: ${pressStats.max} | Low: ${pressStats.min} | Avg: ${pressStats.avg}</div></div>`;
-  
-  // Heat Index
-  const heatStats = calcStats(feeds, 'field8');
-  html += `<div class="metric-card"><div class="metric-title">Heat Index</div><div class="metric-value">${latest.field8 || "0.00"} °C</div>
-    <div class="metric-details">High: ${heatStats.max} °C | Low: ${heatStats.min} °C | Avg: ${heatStats.avg} °C</div></div>`;
-  
-  // Wind Speed
-  const windGustStats = calcStats(feeds, 'field3');
-  html += `<div class="metric-card"><div class="metric-title">Wind Speed</div><div class="metric-value">${latest.field1 || "0.00"} m/s</div>
-    <div class="metric-details">Max Gust: ${latest.field3 || "0.00"} m/s | Daily Max: ${windGustStats.max} m/s</div></div>`;
-  
-  // Wind Direction
-  html += `<div class="metric-card"><div class="metric-title">Wind Direction</div><div class="metric-value">${indexToCompass(latest.field2)}</div></div>`;
-  
-  // Rainfall
-  const rainfall1h = calculateRainfall(feeds, 1), rainfall24h = calculateRainfall(feeds, 24);
-  html += `<div class="metric-card"><div class="metric-title">Rainfall</div><div class="metric-value">${latest.field7 || "0.00"} mm</div>
-    <div class="metric-details">1h: ${rainfall1h} mm | 24h: ${rainfall24h} mm</div></div>`;
-  
-  return html + '</div>';
-};
-
+      const latest = feeds[feeds.length - 1];
+      let html = '<div class="metrics-grid">';
+      
+      // Temperature
+      const tempStats = calcStats(feeds, 'field4');
+      html += `<div class="metric-card"><div class="metric-title">Temperature</div><div class="metric-value">${latest.field4 || "0.00"} °C</div>
+        <div class="metric-details">High: ${tempStats.max} °C | Low: ${tempStats.min} °C | Avg: ${tempStats.avg} °C</div></div>`;
+      
+      // Humidity
+      const humStats = calcStats(feeds, 'field5');
+      html += `<div class="metric-card"><div class="metric-title">Humidity</div><div class="metric-value">${latest.field5 || "0.00"}%</div>
+        <div class="metric-details">High: ${humStats.max}% | Low: ${humStats.min}% | Avg: ${humStats.avg}%</div></div>`;
+      
+      // Pressure
+      const pressStats = calcStats(feeds, 'field6');
+      html += `<div class="metric-card"><div class="metric-title">Pressure</div><div class="metric-value">${latest.field6 || "0.00"} hPa</div>
+        <div class="metric-details">High: ${pressStats.max} | Low: ${pressStats.min} | Avg: ${pressStats.avg}</div></div>`;
+      
+      // Heat Index
+      const heatStats = calcStats(feeds, 'field8');
+      html += `<div class="metric-card"><div class="metric-title">Heat Index</div><div class="metric-value">${latest.field8 || "0.00"} °C</div>
+        <div class="metric-details">High: ${heatStats.max} °C | Low: ${heatStats.min} °C | Avg: ${heatStats.avg} °C</div></div>`;
+      
+      // Wind Speed
+      const windGustStats = calcStats(feeds, 'field3');
+      html += `<div class="metric-card"><div class="metric-title">Wind Speed</div><div class="metric-value">${latest.field1 || "0.00"} m/s</div>
+        <div class="metric-details">Max Gust: ${latest.field3 || "0.00"} m/s | Daily Max: ${windGustStats.max} m/s</div></div>`;
+      
+      // Wind Direction
+      html += `<div class="metric-card"><div class="metric-title">Wind Direction</div><div class="metric-value">${indexToCompass(latest.field2)}</div></div>`;
+      
+      // Rainfall
+      const rainfall1h = calculateRainfall(feeds, 1), rainfall24h = calculateRainfall(feeds, 24);
+      html += `<div class="metric-card"><div class="metric-title">Rainfall</div><div class="metric-value">${latest.field7 || "0.00"} mm</div>
+        <div class="metric-details">1h Total: ${rainfall1h} mm | 24h Total: ${rainfall24h} mm</div></div>`;
+      
+      return html + '</div>';
+    };
     
     // Generate 7-day summary table
 const generateWeeklySummary = stationData => {
