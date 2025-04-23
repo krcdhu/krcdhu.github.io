@@ -4,110 +4,7 @@
   <title>ATLAS: Automated Local Weather Sentry</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-  :root {
-    --primary: #152860; --primary-light: #bfdbfe; --secondary: #64748b;
-    --accent: #f59e0b; --light: #f8fafc; --dark: #1e293b;
-    --success: #10b981; --danger: #ef4444; --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --transition: all 0.2s ease;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Inter', system-ui, sans-serif; background: #f1f5f9;
-    color: var(--dark); line-height: 1.5;
-  }
-  header {
-    background: var(--primary); color: white; padding: 1.5rem;
-    text-align: center; box-shadow: var(--card-shadow);
-  }
-  header h1 { font-weight: 600; font-size: 1.8rem; margin-bottom: 0.3rem; }
-  header p { opacity: 0.9; font-weight: 300; }
-  .last-updated { font-size: 0.85rem; opacity: 0.8; margin-top: 0.5rem; }
-  nav {
-    background: white; padding: 0.75rem; display: flex; justify-content: center;
-    gap: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    position: sticky; top: 0; z-index: 10;
-  }
-  nav button {
-    background: var(--light); border: none; color: var(--secondary);
-    padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 500;
-    cursor: pointer; transition: var(--transition);
-  }
-  nav button:hover { background: var(--primary-light); color: var(--primary); }
-  .content {
-    max-width: 1100px; margin: 1.5rem auto; padding: 1.5rem;
-    background: white; border-radius: 12px; box-shadow: var(--card-shadow);
-  }
-  h2 {
-    color: var(--dark); font-size: 1.5rem; font-weight: 600;
-    margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid #e2e8f0;
-  }
-  h3 {
-    color: var(--dark); font-size: 1.2rem; font-weight: 600;
-    margin: 1.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0;
-  }
-  .metrics-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem; margin-bottom: 1.5rem;
-  }
-  .metric-card {
-    background: #f8fafc; border-radius: 8px; padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); transition: var(--transition);
-  }
-  .metric-card:hover { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
-  .metric-title {
-    color: var(--secondary); font-size: 0.875rem; font-weight: 500;
-    margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .metric-value { font-size: 1.5rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; }
-  .metric-details { font-size: 0.8rem; color: var(--secondary); }
-  .compare-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
-    margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0;
-  }
-  .compare-row:last-child { border-bottom: none; margin-bottom: 0; }
-  .compare-label {
-    grid-column: 1 / -1; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem;
-  }
-  .compare-station {
-    background: #f8fafc; border-radius: 8px; padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  }
-  .compare-station h4 {
-    color: var(--secondary); font-size: 0.875rem; font-weight: 500;
-    margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .compare-highlight { font-size: 1.25rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; }
-  .chart-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-    gap: 1.5rem; margin: 1.5rem 0;
-  }
-  .chart-container {
-    background: white; border-radius: 8px; padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); height: 300px;
-  }
-  table {
-    width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.875rem;
-  }
-  th {
-    background: #f1f5f9; font-weight: 500; text-align: left;
-    color: var(--secondary); padding: 0.75rem 1rem;
-  }
-  td { padding: 0.75rem 1rem; border-top: 1px solid #e2e8f0; }
-  tr:hover { background: #f1f5f9; }
-  .btn {
-    background: var(--primary); color: white; border: none;
-    padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;
-    cursor: pointer; transition: var(--transition);
-  }
-  .btn:hover { background: #1e40af; box-shadow: 0 2px 5px rgba(30, 58, 138, 0.3); }
-  .loading { text-align: center; padding: 2rem; color: var(--secondary); font-size: 1rem; }
-  .summary-table { margin-top: 1.5rem; }
-  .summary-table .summary-day { font-weight: 500; }
-  @media (max-width: 768px) {
-    .chart-grid, .compare-row { grid-template-columns: 1fr; }
-  }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
@@ -133,19 +30,31 @@
     <div id="station2Summary" class="loading">Loading summary data...</div>
   </div>
 
-  <div id="station1" class="content" style="display:none">
+  <div id="station1" class="content hidden-content">
     <h2>Station A: ADNU Main, Bagumbayan Sur, Naga City</h2>
     <div id="station1Data" class="loading">Loading data...</div>
     <div class="chart-grid" id="charts1"></div>
-    <button class="btn" onclick="exportCSV(0)">Export Data (24h)</button>
+<div class="btn-group">
+  <button class="btn" onclick="toggleDateDropdown(0)">Export Data ▼</button>
+  <div id="dateDropdown0" class="date-dropdown">
+    <div class="dropdown-item" onclick="exportCSV(0, 1)">Last 24 hours</div>
+    <div id="date-options0"></div>
+  </div>
+</div>
     <div id="station1Table"></div>
   </div>
 
-  <div id="station2" class="content" style="display:none">
+  <div id="station2" class="content hidden-content">
     <h2>Station B: ADNU JHS, Pacol, Naga City</h2>
     <div id="station2Data" class="loading">Loading data...</div>
     <div class="chart-grid" id="charts2"></div>
-    <button class="btn" onclick="exportCSV(1)">Export Data (24h)</button>
+<div class="btn-group">
+  <button class="btn" onclick="toggleDateDropdown(1)">Export Data ▼</button>
+  <div id="dateDropdown1" class="date-dropdown">
+    <div class="dropdown-item" onclick="exportCSV(1, 1)">Last 24 hours</div>
+    <div id="date-options1"></div>
+  </div>
+</div>
     <div id="station2Table"></div>
   </div>
 
@@ -179,8 +88,16 @@
       const readingsCount = Math.min(hours * 6, feeds.length);
       return feeds.slice(-readingsCount).reduce((sum, f) => sum + safeParseFloat(f.field7, 0), 0).toFixed(2);
     };
-    const switchView = view => ['compare', 'station1', 'station2'].forEach(v => document.getElementById(v).style.display = v === view ? 'block' : 'none');
-    
+	const switchView = view => {
+	  ['compare', 'station1', 'station2'].forEach(v => {
+		const element = document.getElementById(v);
+		if (v === view) {
+		  element.classList.remove('hidden-content');
+		} else {
+		  element.classList.add('hidden-content');
+		}
+	  });
+	}    
     // Format a date as YYYY-MM-DD
     const formatDate = date => {
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -289,38 +206,38 @@ const generateWeeklySummary = stationData => {
   const dayKeys = Object.keys(days).sort((a, b) => new Date(b) - new Date(a));
   
   let html = `
-    <div style="overflow-x: auto;">
-      <table class="summary-table" style="font-size: 0.75rem;">
+    <div class="overflow-scroll-x">
+      <table class="summary-table">
         <tr>
-          <th style="padding: 0.4rem 0.5rem;">Date</th>
-          <th colspan="3" style="padding: 0.4rem 0.3rem;">Temp</th>
-          <th colspan="3" style="padding: 0.4rem 0.3rem;">Hum</th>
-          <th colspan="3" style="padding: 0.4rem 0.3rem;">Pressure</th>
-          <th colspan="3" style="padding: 0.4rem 0.3rem;">Heat Index</th>
-          <th style="padding: 0.4rem 0.3rem;">Avg Wind</th>
-          <th style="padding: 0.4rem 0.3rem;">Max Gust</th>
-          <th style="padding: 0.4rem 0.3rem;">Wind Dir</th>
-          <th style="padding: 0.4rem 0.3rem;">Rain</th>
+          <th class="table-cell-date">Date</th>
+          <th colspan="3" class="table-cell-standard">Temp</th>
+          <th colspan="3" class="table-cell-standard">Hum</th>
+          <th colspan="3" class="table-cell-standard">Pressure</th>
+          <th colspan="3" class="table-cell-standard">Heat Index</th>
+          <th class="table-cell-standard">Avg Wind</th>
+          <th class="table-cell-standard">Max Gust</th>
+          <th class="table-cell-standard">Wind Dir</th>
+          <th class="table-cell-standard">Rain</th>
         </tr>
         <tr>
-          <th style="padding: 0.4rem 0.5rem;"></th>
-          <th style="padding: 0.4rem 0.3rem;">Min</th>
-          <th style="padding: 0.4rem 0.3rem;">Avg</th>
-          <th style="padding: 0.4rem 0.3rem;">Max</th>
-          <th style="padding: 0.4rem 0.3rem;">Min</th>
-          <th style="padding: 0.4rem 0.3rem;">Avg</th>
-          <th style="padding: 0.4rem 0.3rem;">Max</th>
-          <th style="padding: 0.4rem 0.3rem;">Min</th>
-          <th style="padding: 0.4rem 0.3rem;">Avg</th>
-          <th style="padding: 0.4rem 0.3rem;">Max</th>
-          <th style="padding: 0.4rem 0.3rem;">Min</th>
-          <th style="padding: 0.4rem 0.3rem;">Avg</th>
-          <th style="padding: 0.4rem 0.3rem;">Max</th>
-          <th style="padding: 0.4rem 0.3rem;">m/s</th>
-          <th style="padding: 0.4rem 0.3rem;">m/s</th>
-          <th style="padding: 0.4rem 0.3rem;"></th>
-          <th style="padding: 0.4rem 0.3rem;">mm</th>
-        </tr>
+          <th class="table-cell-date"></th>
+          <th class="table-cell-standard">Min</th>
+          <th class="table-cell-standard">Avg</th>
+          <th class="table-cell-standard">Max</th>
+          <th class="table-cell-standard">Min</th>
+          <th class="table-cell-standard">Avg</th>
+          <th class="table-cell-standard">Max</th>
+          <th class="table-cell-standard">Min</th>
+          <th class="table-cell-standard">Avg</th>
+          <th class="table-cell-standard">Max</th>
+          <th class="table-cell-standard">Min</th>
+          <th class="table-cell-standard">Avg</th>
+          <th class="table-cell-standard">Max</th>
+          <th class="table-cell-standard">m/s</th>
+          <th class="table-cell-standard">m/s</th>
+          <th class="table-cell-standard"></th>
+          <th class="table-cell-standard">mm</th>
+		</tr>
   `;
   
   dayKeys.slice(0, 7).forEach(day => {
@@ -340,23 +257,23 @@ const generateWeeklySummary = stationData => {
     
     html += `
       <tr>
-        <td style="padding: 0.4rem 0.5rem;">${dayNum}<br>${dayName}</td>
-        <td style="padding: 0.4rem 0.3rem;">${tempStats.min}</td>
-        <td style="padding: 0.4rem 0.3rem;">${tempStats.avg}</td>
-        <td style="padding: 0.4rem 0.3rem;">${tempStats.max}</td>
-        <td style="padding: 0.4rem 0.3rem;">${humStats.min}</td>
-        <td style="padding: 0.4rem 0.3rem;">${humStats.avg}</td>
-        <td style="padding: 0.4rem 0.3rem;">${humStats.max}</td>
-        <td style="padding: 0.4rem 0.3rem;">${pressStats.min}</td>
-        <td style="padding: 0.4rem 0.3rem;">${pressStats.avg}</td>
-        <td style="padding: 0.4rem 0.3rem;">${pressStats.max}</td>
-        <td style="padding: 0.4rem 0.3rem;">${heatStats.min}</td>
-        <td style="padding: 0.4rem 0.3rem;">${heatStats.avg}</td>
-        <td style="padding: 0.4rem 0.3rem;">${heatStats.max}</td>
-        <td style="padding: 0.4rem 0.3rem;">${windStats.avg}</td>
-        <td style="padding: 0.4rem 0.3rem;">${gustStats.max}</td>
-        <td style="padding: 0.4rem 0.3rem;">${mostFreqDir}</td>
-        <td style="padding: 0.4rem 0.3rem;">${rainfall}</td>
+        <td class="table-cell-date">${dayNum}<br>${dayName}</td>
+        <td class="table-cell-standard">${tempStats.min}</td>
+        <td class="table-cell-standard">${tempStats.avg}</td>
+        <td class="table-cell-standard">${tempStats.max}</td>
+        <td class="table-cell-standard">${humStats.min}</td>
+        <td class="table-cell-standard">${humStats.avg}</td>
+        <td class="table-cell-standard">${humStats.max}</td>
+        <td class="table-cell-standard">${pressStats.min}</td>
+        <td class="table-cell-standard">${pressStats.avg}</td>
+        <td class="table-cell-standard">${pressStats.max}</td>
+        <td class="table-cell-standard">${heatStats.min}</td>
+        <td class="table-cell-standard">${heatStats.avg}</td>
+        <td class="table-cell-standard">${heatStats.max}</td>
+        <td class="table-cell-standard">${windStats.avg}</td>
+        <td class="table-cell-standard">${gustStats.max}</td>
+        <td class="table-cell-standard">${mostFreqDir}</td>
+        <td class="table-cell-standard">${rainfall}</td>
       </tr>
     `;
   });
@@ -420,17 +337,88 @@ const generateWeeklySummary = stationData => {
       return html;
     };
     
-    // Export function
-    const exportCSV = index => {
-      const feeds = fullData[index];
-      let csv = 'Time,Wind Speed (m/s),Wind Direction,Wind Direction (index),Max Gust (m/s),Temperature (°C),Humidity (%),Pressure (hPa),Rainfall (mm),Heat Index (°C)\n';
-      feeds.forEach(feed => {
-        csv += `${feed.created_at},${feed.field1 || '0'},${indexToCompass(feed.field2)},${feed.field2 || ''},${feed.field3 || '0'},${feed.field4 || '0'},${feed.field5 || '0'},${feed.field6 || '0'},${feed.field7 || '0'},${feed.field8 || '0'}\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' }), url = URL.createObjectURL(blob), a = document.createElement('a');
-      a.href = url; a.download = `${stations[index].name}_weather_data.csv`; a.click();
-    };
-    
+	// Function to toggle the date dropdown
+	const toggleDateDropdown = (stationIndex) => {
+	  const dropdown = document.getElementById(`dateDropdown${stationIndex}`);
+	  dropdown.classList.toggle('show-dropdown');
+	  
+	  // Generate date options if they don't exist yet
+	  populateDateOptions(stationIndex);
+	};
+
+	// Function to populate date options in the dropdown
+	const populateDateOptions = (stationIndex) => {
+	  const optionsContainer = document.getElementById(`date-options${stationIndex}`);
+	  if (optionsContainer.innerHTML !== '') return; // Already populated
+	  
+	  const days = groupByDay(weekData[stationIndex]);
+	  const dayKeys = Object.keys(days).sort((a, b) => new Date(b) - new Date(a));
+	  
+	  dayKeys.forEach(day => {
+		const dateObj = new Date(day);
+		const formattedDate = dateObj.toLocaleDateString(undefined, { 
+		  weekday: 'short', 
+		  month: 'short', 
+		  day: 'numeric' 
+		});
+		
+		const option = document.createElement('div');
+		option.className = 'dropdown-item';
+		option.textContent = formattedDate;
+		option.onclick = () => exportCSV(stationIndex, 0, day);
+		
+		optionsContainer.appendChild(option);
+	  });
+	};
+
+	// Modified export function to handle date selection
+	const exportCSV = (index, mode = 1, specificDate = null) => {
+	  let feedsToExport;
+	  
+	  if (mode === 1) {
+		// Last 24 hours (144 entries at 10-minute intervals)
+		feedsToExport = fullData[index];
+	  } else {
+		// Specific date - ensure we only get entries from that exact date
+		feedsToExport = weekData[index].filter(feed => {
+		  const feedDate = new Date(feed.created_at);
+		  // Format the feed date to YYYY-MM-DD for comparison
+		  const feedDateStr = formatDate(feedDate);
+		  // Only include if the date matches exactly
+		  return feedDateStr === specificDate;
+		});
+	  }
+	  
+	  let csv = 'Time,Wind Speed (m/s),Wind Direction,Wind Direction (index),Max Gust (m/s),Temperature (°C),Humidity (%),Pressure (hPa),Rainfall (mm),Heat Index (°C)\n';
+	  
+	  feedsToExport.forEach(feed => {
+		// Format the timestamp to be more readable in the CSV
+		const timestamp = new Date(feed.created_at);
+		const formattedTime = timestamp.toLocaleString();
+		
+		csv += `${formattedTime},${feed.field1 || '0'},${indexToCompass(feed.field2)},${feed.field2 || ''},${feed.field3 || '0'},${feed.field4 || '0'},${feed.field5 || '0'},${feed.field6 || '0'},${feed.field7 || '0'},${feed.field8 || '0'}\n`;
+	  });
+	  
+	  // Include the date in the filename for clarity
+	  const fileName = specificDate ? 
+		`${stations[index].name}_weather_${specificDate}.csv` : 
+		`${stations[index].name}_weather_last24h.csv`;
+	  
+	  // Create and trigger the download
+	  const blob = new Blob([csv], { type: 'text/csv' });
+	  const url = URL.createObjectURL(blob);
+	  const a = document.createElement('a');
+	  a.href = url;
+	  a.download = fileName;
+	  a.click();
+	  
+	  // Clean up
+	  URL.revokeObjectURL(url);
+	  
+	  // Close dropdown after selection
+	  document.getElementById(`dateDropdown${index}`).classList.remove('show-dropdown');
+	};
+		
     // Chart rendering
     const setupCharts = (stationId) => {
       const chartsContainer = document.getElementById(`charts${stationId.slice(-1)}`);
@@ -533,8 +521,9 @@ const generateWeeklySummary = stationData => {
         document.getElementById('station1Table').innerHTML = createTable(feeds1);
         document.getElementById('station2Table').innerHTML = createTable(feeds2);
         document.getElementById('compareData').innerHTML = createComparisonView(feeds1, feeds2);
-        document.getElementById('lastUpdated').innerText = 'Last updated: ' + new Date().toLocaleString();
-        
+        const latestTimestamp = new Date(feeds2[feeds2.length - 1].created_at);
+		document.getElementById('lastUpdated').innerText = 'Last updated: ' + latestTimestamp.toLocaleString();
+
         renderStationCharts('station1', feeds1); 
         renderStationCharts('station2', feeds2);
         
@@ -561,10 +550,11 @@ const generateWeeklySummary = stationData => {
         console.error('Error loading weekly data:', error);
         document.getElementById('station1Summary').innerHTML = 'Failed to load weekly summary.';
         document.getElementById('station2Summary').innerHTML = 'Failed to load weekly summary.';
+		document.getElementById('date-options0').innerHTML = '';
+		document.getElementById('date-options1').innerHTML = '';
       }
     }
 
-    // Initialize
     loadAllData();
     setInterval(loadAllData, 600000); // Refresh every 10 minutes
   </script>
