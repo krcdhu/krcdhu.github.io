@@ -180,10 +180,13 @@
         <div class="metric-details">High: ${pressStats.max} | Low: ${pressStats.min} | Avg: ${pressStats.avg}</div></div>`;
       
       // Heat Index
-      const heatStats = calcStats(feeds, 'field8');
-      html += `<div class="metric-card"><div class="metric-title">Heat Index</div><div class="metric-value">${latest.field8 || "0.00"} °C</div>
-        <div class="metric-details">High: ${heatStats.max} °C | Low: ${heatStats.min} °C | Avg: ${heatStats.avg} °C</div></div>`;
-      
+const heatStats = calcStats(feeds, 'field8');
+const heatCategory = getHeatIndexCategory(latest.field8);
+html += `<div class="metric-card"><div class="metric-title">Heat Index</div>
+  <div class="metric-value">${latest.field8 || "0.00"} °C</div>
+  <div class="metric-category">Category: <span class="${heatCategory.class}">${heatCategory.text}</span></div>
+  <div class="metric-details">High: ${heatStats.max} °C | Low: ${heatStats.min} °C | Avg: ${heatStats.avg} °C</div></div>`;
+
       // Wind Speed
       const windGustStats = calcStats(feeds, 'field3');
       html += `<div class="metric-card"><div class="metric-title">Wind Speed</div><div class="metric-value">${latest.field1 || "0.00"} m/s</div>
@@ -284,7 +287,7 @@ const generateWeeklySummary = stationData => {
     
     const createTable = feeds => {
       let html = '<table><tr><th>Time</th><th>Wind (m/s)</th><th>Dir</th><th>Gust</th><th>Temp (°C)</th><th>Hum (%)</th><th>Press (hPa)</th><th>Rain (mm)</th><th>Heat (°C)</th></tr>';
-      feeds.slice(-30).forEach(feed => {
+      feeds.slice(-72).forEach(feed => {
         html += `<tr><td>${new Date(feed.created_at).toLocaleTimeString()}</td><td>${feed.field1 || '0.00'}</td><td>${indexToCompass(feed.field2)}</td>
           <td>${feed.field3 || '0.00'}</td><td>${feed.field4 || '0.00'}</td><td>${feed.field5 || '0.00'}</td><td>${feed.field6 || '0.00'}</td>
           <td>${feed.field7 || '0.00'}</td><td>${feed.field8 || '0.00'}</td></tr>`;
@@ -333,92 +336,113 @@ const generateWeeklySummary = stationData => {
         return `<div class="metric-details">1h Total: ${rainfall1h} mm | 24h Total: ${rainfall24h} mm</div>`;
       });
       
-      html += compareField('Heat Index', 'field8', '°C');
-      return html;
+	html += compareField('Heat Index', 'field8', '°C', heatIndexExtras);
+	return html;
     };
     
-	// Function to toggle the date dropdown
 	const toggleDateDropdown = (stationIndex) => {
-	  const dropdown = document.getElementById(`dateDropdown${stationIndex}`);
-	  dropdown.classList.toggle('show-dropdown');
-	  
-	  // Generate date options if they don't exist yet
-	  populateDateOptions(stationIndex);
-	};
+  const dropdown = document.getElementById(`dateDropdown${stationIndex}`);
+  dropdown.classList.toggle('show-dropdown');
+  
+  // Generate date options if they don't exist yet
+  populateDateOptions(stationIndex);
+  
+  // Close other dropdown if it's open
+  const otherIndex = stationIndex === 0 ? 1 : 0;
+  const otherDropdown = document.getElementById(`dateDropdown${otherIndex}`);
+  if (otherDropdown.classList.contains('show-dropdown')) {
+    otherDropdown.classList.remove('show-dropdown');
+  }
+};
 
-	// Function to populate date options in the dropdown
-	const populateDateOptions = (stationIndex) => {
-	  const optionsContainer = document.getElementById(`date-options${stationIndex}`);
-	  if (optionsContainer.innerHTML !== '') return; // Already populated
-	  
-	  const days = groupByDay(weekData[stationIndex]);
-	  const dayKeys = Object.keys(days).sort((a, b) => new Date(b) - new Date(a));
-	  
-	  dayKeys.forEach(day => {
-		const dateObj = new Date(day);
-		const formattedDate = dateObj.toLocaleDateString(undefined, { 
-		  weekday: 'short', 
-		  month: 'short', 
-		  day: 'numeric' 
-		});
-		
-		const option = document.createElement('div');
-		option.className = 'dropdown-item';
-		option.textContent = formattedDate;
-		option.onclick = () => exportCSV(stationIndex, 0, day);
-		
-		optionsContainer.appendChild(option);
-	  });
-	};
+// Function to populate date options in the dropdown
+const populateDateOptions = (stationIndex) => {
+  const optionsContainer = document.getElementById(`date-options${stationIndex}`);
+  if (optionsContainer.innerHTML !== '') return; // Already populated
+  
+  // Generate all dates from today back to April 18
+  const endDate = new Date(); // Today's date - automatically adjusts daily
+  const startDate = new Date('2025-04-18');
+  
+  // Loop backward through all dates
+  for (let d = new Date(endDate); d >= startDate; d.setDate(d.getDate() - 1)) {
+    const day = formatDate(d);
+    const formattedDate = d.toLocaleDateString(undefined, { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+    
+    const option = document.createElement('div');
+    option.className = 'dropdown-item';
+    option.textContent = formattedDate;
+    option.onclick = () => exportCSV(stationIndex, 0, day);
+    
+    optionsContainer.appendChild(option);
+  }
+};
 
-	// Modified export function to handle date selection
-	const exportCSV = (index, mode = 1, specificDate = null) => {
-	  let feedsToExport;
-	  
-	  if (mode === 1) {
-		// Last 24 hours (144 entries at 10-minute intervals)
-		feedsToExport = fullData[index];
-	  } else {
-		// Specific date - ensure we only get entries from that exact date
-		feedsToExport = weekData[index].filter(feed => {
-		  const feedDate = new Date(feed.created_at);
-		  // Format the feed date to YYYY-MM-DD for comparison
-		  const feedDateStr = formatDate(feedDate);
-		  // Only include if the date matches exactly
-		  return feedDateStr === specificDate;
-		});
-	  }
-	  
-	  let csv = 'Time,Wind Speed (m/s),Wind Direction,Wind Direction (index),Max Gust (m/s),Temperature (°C),Humidity (%),Pressure (hPa),Rainfall (mm),Heat Index (°C)\n';
-	  
-	  feedsToExport.forEach(feed => {
-		// Format the timestamp to be more readable in the CSV
-		const timestamp = new Date(feed.created_at);
-		const formattedTime = timestamp.toLocaleString();
-		
-		csv += `${formattedTime},${feed.field1 || '0'},${indexToCompass(feed.field2)},${feed.field2 || ''},${feed.field3 || '0'},${feed.field4 || '0'},${feed.field5 || '0'},${feed.field6 || '0'},${feed.field7 || '0'},${feed.field8 || '0'}\n`;
-	  });
-	  
-	  // Include the date in the filename for clarity
-	  const fileName = specificDate ? 
-		`${stations[index].name}_weather_${specificDate}.csv` : 
-		`${stations[index].name}_weather_last24h.csv`;
-	  
-	  // Create and trigger the download
-	  const blob = new Blob([csv], { type: 'text/csv' });
-	  const url = URL.createObjectURL(blob);
-	  const a = document.createElement('a');
-	  a.href = url;
-	  a.download = fileName;
-	  a.click();
-	  
-	  // Clean up
-	  URL.revokeObjectURL(url);
-	  
-	  // Close dropdown after selection
-	  document.getElementById(`dateDropdown${index}`).classList.remove('show-dropdown');
-	};
-		
+// Modified export function to handle date selection correctly
+const exportCSV = (index, mode = 1, dateValue = null) => {
+  let feedsToExport;
+  
+  if (mode === 1) {
+    // Last 24 hours (144 entries at 10-minute intervals)
+    feedsToExport = fullData[index];
+  } else if (mode === 0) {
+    // Specific date - we need to ensure we get exactly midnight to midnight
+    document.getElementById(`dateDropdown${index}`).classList.remove('show-dropdown');
+      
+    // Show loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loadingExport';
+    loadingDiv.className = 'loading-export';
+    loadingDiv.textContent = `Fetching data for ${dateValue}...`;
+    document.body.appendChild(loadingDiv);
+    
+    // Calculate start and end dates in UTC format for the API
+    // Start: the selected date at 00:00:00
+    // End: the next day at 00:00:00
+    const selectedDate = new Date(dateValue + 'T00:00:00');
+    const nextDay = new Date(selectedDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    
+    // Format dates for ThingSpeak API (YYYY-MM-DDThh:mm:ssZ)
+    const startDateUTC = selectedDate.toISOString();
+    const endDateUTC = nextDay.toISOString();
+    
+    fetchRangeData(index, startDateUTC, endDateUTC)
+      .then(feeds => {
+        if (feeds.length === 0) {
+          alert('No data available for the selected date.');
+          document.body.removeChild(loadingDiv);
+          return;
+        }
+        
+        prepareAndDownloadCSV(index, feeds, `${stations[index].name}_weather_${dateValue}.csv`);
+        document.body.removeChild(loadingDiv);
+      })
+      .catch(error => {
+        console.error('Error fetching date data:', error);
+        alert('Failed to fetch data. Please try again later.');
+        document.body.removeChild(loadingDiv);
+      });
+    
+    return; // Early return as we're handling this asynchronously
+  }
+  
+  // For mode 1, we already have the data
+  if (feedsToExport && feedsToExport.length > 0) {
+    const fileName = `${stations[index].name}_weather_last24h.csv`;
+    prepareAndDownloadCSV(index, feedsToExport, fileName);
+  } else {
+    alert('No data available for the selected period.');
+  }
+  
+  // Close dropdown after selection
+  document.getElementById(`dateDropdown${index}`).classList.remove('show-dropdown');
+};
+
     // Chart rendering
     const setupCharts = (stationId) => {
       const chartsContainer = document.getElementById(`charts${stationId.slice(-1)}`);
@@ -431,7 +455,7 @@ const generateWeeklySummary = stationData => {
     };
     
     const renderStationCharts = (stationId, feeds) => {
-      const data = feeds.slice(-30), stationNum = stationId.slice(-1);
+      const data = feeds.slice(-144), stationNum = stationId.slice(-1);
       chartConfigs.forEach(config => {
         const chartId = `chart${stationNum}-${config.field}`;
         if (config.isDirection) {
@@ -472,43 +496,50 @@ const generateWeeklySummary = stationData => {
     };
     
     const renderWindDirectionChart = (canvasId, {label, data, color}) => {
-      const ctx = document.getElementById(canvasId).getContext('2d');
-      const directionData = data.map(index => (index === null || isNaN(index)) ? null : parseInt(index) % 8);
-      if (charts[canvasId]) charts[canvasId].destroy();
-      charts[canvasId] = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: directionData.map((_, i) => i + 1),
-          datasets: [{
-            label: 'Wind Direction', data: directionData, borderColor: color, backgroundColor: `${color}20`, 
-            borderWidth: 2, pointRadius: 3, tension: 0.3, fill: false
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: {
-            legend: { display: true, position: 'top', labels: { boxWidth: 12, padding: 10 } },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  const index = context.parsed.y;
-                  return index >= 0 && index < directions.length ? directions[index] : 'N/A';
-                }
-              }
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  const directionData = data.map(index => (index === null || isNaN(index)) ? null : parseInt(index) % 8);
+  if (charts[canvasId]) charts[canvasId].destroy();
+  charts[canvasId] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: directionData.map((_, i) => i + 1),
+      datasets: [{
+        label: 'Wind Direction', 
+        data: directionData, 
+        borderColor: color, 
+        backgroundColor: `${color}20`, 
+        borderWidth: 2, 
+        pointRadius: 3,
+        pointBackgroundColor: color,  // Add this line to fill the data points
+        tension: 0.3, 
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, padding: 10 } },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const index = context.parsed.y;
+              return index >= 0 && index < directions.length ? directions[index] : 'N/A';
             }
-          },
-          scales: {
-            x: { display: true, grid: { display: false } },
-            y: {
-              display: true, min: 0, max: 7, 
-              ticks: { stepSize: 1, callback: value => value < directions.length ? directions[value] : '' }
-            }
-          },
-          interaction: { mode: 'nearest', intersect: false }
+          }
         }
-      });
-    };
-    
+      },
+      scales: {
+        x: { display: true, grid: { display: false } },
+        y: {
+          display: true, min: 0, max: 7, 
+          ticks: { stepSize: 1, callback: value => value < directions.length ? directions[value] : '' }
+        }
+      },
+      interaction: { mode: 'nearest', intersect: false }
+    }
+  });
+};
+
     // Main loading function
     async function loadAllData() {
       try {
@@ -552,8 +583,73 @@ const generateWeeklySummary = stationData => {
         document.getElementById('station2Summary').innerHTML = 'Failed to load weekly summary.';
 		document.getElementById('date-options0').innerHTML = '';
 		document.getElementById('date-options1').innerHTML = '';
+
       }
     }
+
+	
+  // Heat index category function
+  const getHeatIndexCategory = (value) => {
+  const heatValue = safeParseFloat(value, 0);
+  if (heatValue < 27) return { text: "Not Hazardous", class: "heat-normal" };
+  if (heatValue < 33) return { text: "Caution", class: "heat-caution" };     
+  if (heatValue < 42) return { text: "Extreme Caution", class: "heat-extreme-caution" }; 
+  if (heatValue < 52) return { text: "Danger", class: "heat-danger" };        
+  return { text: "Extreme Danger", class: "heat-extreme-danger" };             
+};
+
+const heatIndexExtras = (feeds, latest) => {
+  const stats = calcStats(feeds, 'field8');
+  const category = getHeatIndexCategory(latest.field8);
+  return `<div class="metric-category">Category: <span class="${category.class}">${category.text}</span></div>
+    <div class="metric-details">High: ${stats.max} °C | Low: ${stats.min} °C | Avg: ${stats.avg} °C</div>`;
+};
+
+const fetchRangeData = async (stationIndex, startDate, endDate = null) => {
+  const station = stations[stationIndex];
+  
+  // Build the API URL with properly formatted date parameters
+  let apiUrl = `https://api.thingspeak.com/channels/${station.id}/feeds.json?api_key=${station.key}&start=${startDate}`;
+  
+  // Add end date if specified
+  if (endDate) {
+    apiUrl += `&end=${endDate}`;
+  }
+  
+  const res = await fetch(apiUrl);
+  const data = await res.json();
+  
+  // Return only the feeds
+  return data.feeds || [];
+};
+
+const feedBelongsToDate = (feed, dateStr) => {
+  const feedDate = new Date(feed.created_at);
+  return formatDate(feedDate) === dateStr;
+};
+
+const prepareAndDownloadCSV = (index, feeds, fileName) => {
+  let csv = 'Time,Wind Speed (m/s),Wind Direction,Wind Direction (index),Max Gust (m/s),Temperature (°C),Humidity (%),Pressure (hPa),Rainfall (mm),Heat Index (°C)\n';
+  
+  feeds.forEach(feed => {
+    // Format the timestamp to be more readable in the CSV
+    const timestamp = new Date(feed.created_at);
+    const formattedTime = timestamp.toLocaleString();
+    
+    csv += `${formattedTime},${feed.field1 || '0'},${indexToCompass(feed.field2)},${feed.field2 || ''},${feed.field3 || '0'},${feed.field4 || '0'},${feed.field5 || '0'},${feed.field6 || '0'},${feed.field7 || '0'},${feed.field8 || '0'}\n`;
+  });
+  
+  // Create and trigger the download
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  
+  // Clean up
+  URL.revokeObjectURL(url);
+};
 
     loadAllData();
     setInterval(loadAllData, 600000); // Refresh every 10 minutes
