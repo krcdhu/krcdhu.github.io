@@ -552,7 +552,7 @@ const exportCSV = (index, mode = 1, dateValue = null) => {
         document.getElementById('station1Table').innerHTML = createTable(feeds1);
         document.getElementById('station2Table').innerHTML = createTable(feeds2);
         document.getElementById('compareData').innerHTML = createComparisonView(feeds1, feeds2);
-        const latestTimestamp = new Date(feeds2[feeds2.length - 1].created_at);
+        const latestTimestamp = new Date(feeds1[feeds1.length - 1].created_at);
 		document.getElementById('lastUpdated').innerText = 'Last updated: ' + latestTimestamp.toLocaleString();
 
         renderStationCharts('station1', feeds1); 
